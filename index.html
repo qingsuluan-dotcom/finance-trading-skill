@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>finance-trading-skill</title>
+  <style>
+    :root {
+      --ink: #17211b;
+      --muted: #5c6a62;
+      --line: #d8e1dc;
+      --paper: #f7faf8;
+      --white: #ffffff;
+      --green: #0f8f68;
+      --red: #c94c4c;
+      --gold: #b9841f;
+      --blue: #256a9a;
+      --shadow: 0 18px 50px rgba(20, 36, 28, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background:
+        linear-gradient(180deg, rgba(247, 250, 248, 0.94), rgba(238, 245, 241, 0.96)),
+        repeating-linear-gradient(90deg, rgba(15, 143, 104, 0.06) 0 1px, transparent 1px 72px);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(247, 250, 248, 0.86);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      box-shadow: 0 10px 24px rgba(15, 143, 104, 0.24);
+    }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .navlinks a {
+      text-decoration: none;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .navlinks a:hover {
+      color: var(--ink);
+      background: #eaf2ee;
+    }
+
+    main {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 42px 20px 56px;
+      width: 100%;
+    }
+
+    .hero {
+      min-height: calc(100vh - 96px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.98fr);
+      gap: 34px;
+      align-items: center;
+      padding-bottom: 42px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #0f6e54;
+      background: #dff1ea;
+      border: 1px solid #c6e4d9;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 22px 0 16px;
+      font-size: clamp(42px, 7vw, 86px);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.8;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .button {
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--ink);
+      text-decoration: none;
+      min-height: 44px;
+      padding: 11px 15px;
+      border-radius: 8px;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(20, 36, 28, 0.08);
+    }
+
+    .button.primary {
+      color: white;
+      border-color: #0b7757;
+      background: #0f8f68;
+    }
+
+    .terminal {
+      background: #101815;
+      color: #dcebe4;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid #1f332b;
+    }
+
+    .terminal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #15231d;
+      border-bottom: 1px solid #284338;
+      color: #a9c9ba;
+      font-size: 13px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .dot:nth-child(2) {
+      background: var(--gold);
+    }
+
+    .dot:nth-child(3) {
+      background: var(--red);
+    }
+
+    canvas {
+      width: 100%;
+      height: 210px;
+      display: block;
+      background: #0e1713;
+    }
+
+    .console {
+      padding: 16px;
+      font-family: Consolas, "SFMono-Regular", monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #cfe5dc;
+      min-height: 186px;
+    }
+
+    .console b {
+      color: #7ee0ba;
+      font-weight: 700;
+    }
+
+    section {
+      padding: 54px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      max-width: 780px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(20, 36, 28, 0.06);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .card ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      counter-reset: step;
+    }
+
+    .step {
+      position: relative;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      min-height: 142px;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: white;
+      background: var(--green);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .prompt-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .prompt {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: Consolas, "SFMono-Regular", monospace;
+      color: #294339;
+      overflow-wrap: anywhere;
+    }
+
+    .risk {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .risk-panel {
+      background: #111a16;
+      color: #d9ebe4;
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .risk-panel p {
+      color: #a9c9ba;
+      line-height: 1.8;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .check {
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #31493f;
+      font-weight: 700;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero, .risk {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .grid, .flow, .checklist {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .navlinks {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <nav class="nav" aria-label="主导航">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">FT</div>
+          <span>finance-trading-skill</span>
+        </div>
+        <div class="navlinks">
+          <a href="#what">能力</a>
+          <a href="#flow">流程</a>
+          <a href="#prompts">示例</a>
+          <a href="#risk">边界</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <div>
+          <span class="eyebrow">中文金融 Agent Skill</span>
+          <h1 id="title">把投研问题拆成可复现的流程</h1>
+          <p class="lead">
+            它会把“这只票强不强”“策略靠谱吗”“财报有没有改善”翻译成数据源、策略规则、回测指标和风险清单。少一点玄学，多一点证据；少一点拍脑袋，多一点可复盘。
+          </p>
+          <div class="actions">
+            <a class="button primary" href="./SKILL.md">查看 Skill</a>
+            <a class="button" href="./references/strategy-templates.md">策略模板</a>
+          </div>
+        </div>
+
+        <aside class="terminal" aria-label="演示面板">
+          <div class="terminal-top">
+            <div class="dots" aria-hidden="true">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <span>MA 20/60 回测快照</span>
+          </div>
+          <canvas id="chart" width="720" height="300" aria-label="策略净值曲线"></canvas>
+          <div class="console">
+            <div><b>任务</b>：300750.SZ 双均线策略</div>
+            <div><b>数据</b>：日线、基准沪深300、记录来源与时间戳</div>
+            <div><b>输出</b>：收益、回撤、Sharpe、交易次数、风险提示</div>
+            <div><b>态度</b>：不喊单，不造神，只把假设和证据摆上桌</div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="what">
+        <div class="section-head">
+          <h2>这个 Skill 到底管什么</h2>
+          <p>它像一个有条理的金融任务调度台：先识别意图，再找数据，再建规则，最后交付能检查的报告。</p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <h3>投研分析</h3>
+            <p>处理行情强弱、财务质量、估值变化、公告新闻和行业催化，把结论绑在数据范围和来源上。</p>
+          </article>
+          <article class="card">
+            <h3>策略回测</h3>
+            <p>把自然语言策略写成明确规则，选择向量化或事件驱动回测，输出指标和基准对比。</p>
+          </article>
+          <article class="card">
+            <h3>风险复盘</h3>
+            <p>检查未来函数、过拟合、停牌、涨跌停、交易成本、流动性和样本外稳定性。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="flow">
+        <div class="section-head">
+          <h2>工作流不绕弯</h2>
+          <p>金融分析最怕一上来就给结论。这个 Skill 的节奏是先把问题钉牢，再让数据和假设一起上场。</p>
+        </div>
+        <div class="flow">
+          <div class="step">
+            <h3>识别意图</h3>
+            <p>投研、筛选、策略、回测、优化、导出，先分清楚是哪类活。</p>
+          </div>
+          <div class="step">
+            <h3>选择数据</h3>
+            <p>A 股优先 Tushare、AKShare、问财式资讯，必要时读取本地 CSV。</p>
+          </div>
+          <div class="step">
+            <h3>明确规则</h3>
+            <p>标的池、信号、买卖、仓位、调仓、手续费、滑点、基准全部写清楚。</p>
+          </div>
+          <div class="step">
+            <h3>报告交付</h3>
+            <p>给结论，也给证据；给收益，也给回撤；给结果，也给限制。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="prompts">
+        <div class="section-head">
+          <h2>可以这样召唤它</h2>
+          <p>这些句子适合作为作品集演示，也适合真实测试这个 Skill 的任务拆解能力。</p>
+        </div>
+        <div class="prompt-list">
+          <div class="prompt">用 $finance-trading-skill 看一下宁德时代最近三个月强不强，并说明数据来源。</div>
+          <div class="prompt">用 $finance-trading-skill 回测 300750.SZ 从 2024 到现在的 20/60 日双均线策略。</div>
+          <div class="prompt">用 $finance-trading-skill 设计一个高 ROE + 动量的 A 股筛选流程，重点检查过拟合和流动性。</div>
+          <div class="prompt">用 $finance-trading-skill 把这个策略做成报告：收益、回撤、Sharpe、交易次数、风险提示都要有。</div>
+        </div>
+      </section>
+
+      <section id="risk">
+        <div class="risk">
+          <div class="risk-panel">
+            <h2>它不装神秘</h2>
+            <p>
+              市场不会因为一个漂亮页面就变得温柔。这个 Skill 的底线是：不自动实盘、不承诺收益、不把历史回测包装成未来预言。
+            </p>
+            <p>
+              它擅长把研究流程变清楚，把证据链变完整，把风险放到台面上。该兴奋的时候兴奋，该踩刹车的时候踩刹车。
+            </p>
+          </div>
+          <div class="checklist" aria-label="风险检查项">
+            <div class="check">数据来源与时间戳</div>
+            <div class="check">复权与字段口径</div>
+            <div class="check">手续费与滑点</div>
+            <div class="check">最大回撤</div>
+            <div class="check">未来函数</div>
+            <div class="check">幸存者偏差</div>
+            <div class="check">参数过拟合</div>
+            <div class="check">流动性限制</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      做金融 Agent，可以聪明一点，也要诚实一点。
+    </footer>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("chart");
+    const ctx = canvas.getContext("2d");
+    const points = [1, 1.04, 1.01, 1.09, 1.14, 1.1, 1.22, 1.19, 1.31, 1.37, 1.32, 1.46, 1.42, 1.56, 1.63];
+    let frame = 0;
+
+    function draw() {
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.fillStyle = "#0e1713";
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.strokeStyle = "rgba(207, 229, 220, 0.12)";
+      ctx.lineWidth = 1;
+      for (let x = 40; x < width; x += 80) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 40; y < height; y += 60) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      const min = Math.min(...points) * 0.94;
+      const max = Math.max(...points) * 1.04;
+      const progress = Math.min(1, frame / 90);
+      const count = Math.max(2, Math.floor(points.length * progress));
+
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "#7ee0ba";
+      ctx.beginPath();
+      for (let i = 0; i < count; i += 1) {
+        const x = 36 + (i / (points.length - 1)) * (width - 72);
+        const y = height - 34 - ((points[i] - min) / (max - min)) * (height - 68);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      const lastIndex = count - 1;
+      const lx = 36 + (lastIndex / (points.length - 1)) * (width - 72);
+      const ly = height - 34 - ((points[lastIndex] - min) / (max - min)) * (height - 68);
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(lx, ly, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#a9c9ba";
+      ctx.font = "22px Consolas, monospace";
+      ctx.fillText("equity curve", 26, 38);
+      ctx.fillStyle = "#7ee0ba";
+      ctx.fillText("+62.64%", width - 132, 38);
+
+      frame = frame < 120 ? frame + 1 : 0;
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+</html>
