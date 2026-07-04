@@ -1,0 +1,7 @@
+interface:
+  display_name: "Finance Trading Skill"
+  short_description: "Research, backtest, and report finance strategies"
+  default_prompt: "Use $finance-trading-skill to analyze a stock strategy, run a reproducible backtest, and summarize risks."
+
+policy:
+  allow_implicit_invocation: true
