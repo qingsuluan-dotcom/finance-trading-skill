@@ -69,7 +69,6 @@ finance-trading-skill/
 
 [打开 index.html](./index.html)
 
-如果启用 GitHub Pages，可以把它当作作品集页面使用。
 
 ## 安全边界
 
