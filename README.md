@@ -97,7 +97,7 @@ finance-trading-skill/
 
 **[打开在线展示页](https://qingsuluan-dotcom.github.io/finance-trading-skill/)**
 
-GitHub 仓库首页会展示 README；真正的 HTML 页面由 GitHub Pages 渲染。
+
 
 ---
 
